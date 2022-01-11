@@ -64,62 +64,43 @@ def consistentIter(x):
 
 
 
-def backRec1(x):
-    x.append(the_list[0])  # add a new component to the candidate solution
 
-    while len(x) > 0:
-        ok = 0
-        while ok==0:
-            x.append(0)
-            for i in the_list:
-                x[-1] = i  # set current component
-                if validate(x, i):
-                    if consistent(x):
-                        if solution(x, DIM):
-                            solutionFound(x)
-                        ok=1
-                        break
-
-            x.pop()
 
 
 
 def backIter(dim):
     index=0
     x = [the_list[0]]
+    poz=[]
     while len(x) > 0:
         choosed = False
-
         while not choosed and index < dim:
             x[-1] = the_list[index]
             index += 1
             choosed = consistent(x)
         if choosed:
-            if solution(x, DIM):
-                solutionFound(x)
-            else:
-                x.append(0)
-                index=0
-            # expand candidate solution
+            if len(poz)<len(x):
+                poz.append(index-1)
+            else: poz[-1]=index-1
+            if validate(x, x[-1]):
+                if solution(x, DIM):
+                    solutionFound(x)
+                else:
+                    x.append(0)
+                    index=0
         else:
             x = x[:-1]
-            # go back one component
+            poz=poz[:-1]
+            if len(poz)>0:
+                if poz[-1]+1<dim:
+                    index = poz[-1]+1
 
-def backIter1(dim):
-     x =[-1] #candidate solution
-     while len(x)>0:
-         choosed = False
-         while not choosed and x[-1]<dim-1:
-             x[-1] = x[-1]+1 #increase the last component
-             choosed = consistent(x)
-         if choosed:
-             if solution(x, dim):
-                 solutionFound(x)
-             x.append(-1) # expand candidate solution
-         else:
-            x = x[:-1] #go back one component
+
+
+
 
 
 DIM = 4
 the_list = [16, 27, 18, 14]
-backRec1([])
+#backIter(4)
+backRec([])
